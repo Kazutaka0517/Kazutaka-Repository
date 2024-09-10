@@ -1,0 +1,114 @@
+/* 全体のレイアウト */
+body {
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* フォームスタイル */
+form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* 経由地点スタイル */
+#viaPointsContainer > div {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.removeViaPoint {
+    background-color: #e74c3c;
+    margin-left: 10px;
+}
+
+.removeViaPoint:hover {
+    background-color: #c0392b;
+}
+
+/* オートコンプリートスタイル */
+.autocomplete-suggestions {
+    border: 1px solid #ddd;
+    background: white;
+    overflow: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.autocomplete-suggestions li {
+    padding: 8px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.autocomplete-suggestions li:hover,
+.autocomplete-suggestions li:focus {
+    background-color: #f0f0f0;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    input[type="text"],
+    input[type="date"],
+    input[type="time"] {
+        font-size: 16px; /* モバイルでのズームを防ぐ */
+    }
+}
+
+/* エラーメッセージスタイル */
+.error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+
+/* 追加のアクセシビリティ */
+input:focus,
+button:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}

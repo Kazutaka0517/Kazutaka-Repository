@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained();
+            $table->string('title',50);
+            $table->text('description');
+            $table->text('user_comment');
+            $table->timestamps();//一つでcreated_atとupdated_atを作成
+            $table->softDeletes();
         });
     }
 
