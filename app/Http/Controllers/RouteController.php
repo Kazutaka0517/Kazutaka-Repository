@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SavedRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class RouteController extends Controller
 {
@@ -18,15 +20,19 @@ class RouteController extends Controller
     public function findRoute(Request $request)
     {
         try {
-            $request->validate([
-                'start' => 'required|string',
-                'goal' => 'required|string',
-                'start_time' => 'required|date_format:Y-m-d\TH:i:s',
-                'via' => 'nullable|array',
-            ]);
+          
+    $request->validate([
+        'start' => 'required|string',
+        'goal' => 'required|string',
+        'start_date' => 'required|date_format:Y-m-d',
+        'start_time' => 'required|date_format:H:i',
+        'via' => 'nullable|array',
+    ]);
         
             $startInfo = $this->getStationInfo($request->input('start'));
             $goalInfo = $this->getStationInfo($request->input('goal'));
+            $startDateTime = $request->input('start_date') . 'T' . $request->input('start_time') . ':00';
+        
         
         if (!$startInfo || !$goalInfo) {
             throw new \Exception('出発地または目的地の情報が見つかりません。');
@@ -43,7 +49,7 @@ class RouteController extends Controller
                     
                     'start' => $startInfo['lat'] . ',' . $startInfo['lon'],
                     'goal' => $goalInfo['lat'] . ',' . $goalInfo['lon'],
-                    'start_time' => $request->input('start_time'),
+                    'start_time' => $startDateTime,
                     'via' => $request->input('via', []),
                     'limit' => 5,
                     'datum' => 'wgs84',
@@ -58,22 +64,22 @@ class RouteController extends Controller
         
             $data = $response->json();
         
-            $viewData = [
-            
-                'routes' => $data['items'] ?? [],
-                'start' => $request->input('start'),
-                'goal' => $request->input('goal'),
-                'start_time' => $request->input('start_time'),
-                'via' => $request->input('via'),
-            ];
-        
+             $viewData = [
+            'routes' => $data['items'] ?? [],
+            'start' => $request->input('start'),
+            'goal' => $request->input('goal'),
+            'start_date' => $request->input('start_date'),
+            'start_time' => $request->input('start_time'),
+            'via' => $request->input('via', []),
+        ];
+
         if ($request->ajax()) {
             return view('posts.route_result', $viewData)->render();
         }
         
         return view('posts.route_result', $viewData);
         
-        } catch (\Exception $e) {
+    } catch (\Exception $e) {
             \Log::error('Route search error', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -86,31 +92,7 @@ class RouteController extends Controller
         }
     }
 
-    private function geocode($address, $apiKey)
-    {
-        $response = Http::withHeaders([
-            'X-RapidAPI-Host' => 'navitime-geocoding.p.rapidapi.com',
-            'X-RapidAPI-Key' => $apiKey,
-        ])->get($this->geocodingApiEndpoint, [
-            'word' => $address,
-            'datum' => 'wgs84',
-            'coord_unit' => 'degree',
-            'fuzzy' => 'true',  // あいまい検索を有効にする
-        ]);
-
-        if (!$response->successful()) {
-            throw new \Exception('Geocoding API request failed: ' . $response->status() . ' - ' . $response->body());
-        }
-
-        $data = $response->json();
-        
-        if (empty($data['items'])) {
-            throw new \Exception("地点が見つかりません: {$address}");
-        }
-
-        $location = $data['items'][0]['coord'];
-        return "{$location['lat']},{$location['lon']}";
-    }
+   
 
     public function autocomplete(Request $request)
 {

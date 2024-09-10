@@ -5,13 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const startInput = document.getElementById('start');
     const goalInput = document.getElementById('goal');
 
-    // 出発時刻の初期化
-    const startTimeInput = document.getElementById('start_time_input');
-    const startTimeHidden = document.getElementById('start_time');
-    if (startTimeHidden.value) {
-        const date = new Date(startTimeHidden.value);
-        startTimeInput.value = date.toISOString().slice(0, 16);
-    }
+  
 
     addViaPointButton.addEventListener('click', addViaPoint);
 
@@ -26,36 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // オートコンプリートの設定
     setupAutocomplete(startInput);
     setupAutocomplete(goalInput);
-
-    // フォーム送信のイベントリスナーを追加
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(form);
-        
-        // 日時の形式を調整
-        const startTimeValue = startTimeInput.value;
-        if (startTimeValue) {
-            formData.set('start_time', new Date(startTimeValue).toISOString().replace(/\.\d{3}Z$/, ''));
-        }
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.text())
-        .then(html => {
-            document.body.innerHTML = html;
-            history.pushState(null, '', form.action);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('ルート検索中にエラーが発生しました。');
-        });
-    });
+    
 
     function addViaPoint() {
         const viaPointCount = viaPointsContainer.children.length + 1;

@@ -16,7 +16,7 @@
     |
     */
     // Route::get('/route', [RouteController::class, 'index'])->name('route.index');
-    Route::post('/route-search', [RouteController::class, 'findRoute'])->name('route.find');
+    Route::post('/route/find', [RouteController::class, 'findRoute'])->name('route.find');
     Route::get('/autocomplete',[RouteController::class, 'autocomplete'])->name('route.autocomplete');
     Route::get('/dashboard', function () {
         return view('dashboard');
