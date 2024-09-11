@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Blog</title>
-        <!--これコメントタグ下のコードはlinkタグでフォント指定 -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link href="{{ asset('css/routePlanner.css') }}" rel="stylesheet">
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/routePlanner.css', 'resources/js/routePlanner.js'])
     </head>
     
     <x-app-layout>
@@ -36,13 +34,13 @@
                 <input type="text" id="goal" name="goal" required placeholder="例: 横浜駅" value="{{ old('goal') }}">
             </div>
             <div>
-    <label for="start_date">出発日</label>
-    <input type="date" id="start_date" name="start_date" required value="{{ old('start_date') }}">
-</div>
-<div>
-    <label for="start_time">出発時刻</label>
-    <input type="time" id="start_time" name="start_time" required value="{{ old('start_time') }}">
-</div>
+                <label for="start_date">出発日</label>
+                <input type="date" id="start_date" name="start_date" required value="{{ old('start_date') }}">
+            </div>
+            <div>
+                <label for="start_time">出発時刻</label>
+                <input type="time" id="start_time" name="start_time" required value="{{ old('start_time') }}">
+            </div>
             <div id="viaPointsContainer">
                 @if(old('via'))
                     @foreach(old('via') as $index => $via)
@@ -60,6 +58,5 @@
             </div>
         </form>
     </div>
-    <script src="{{ asset('js/routePlanner.js') }}"></script>
-</x-app-layout>    
+    </x-app-layout>    
 </html>
